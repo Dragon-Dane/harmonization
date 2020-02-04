@@ -185,7 +185,7 @@ def online_DL(X, D=None, n_atoms=None, niter=250, batchsize=128, rho=1., t0=1e-3
         B_prime += x_alpha_T
 
         update_D(D, A, B, X, positivity=False)
-        D_temporal[..., t] = D
+        D_temporal[..., t-1] = D
 
         # reset past information every two full epochs
         if seen_patches > 2 * X.shape[0]:
