@@ -155,6 +155,9 @@ def online_DL(X, D=None, n_atoms=None, niter=250, batchsize=128, rho=1., t0=1e-3
         batches = cycle(gen_batches(X.shape[0], batchsize))
         iterator = zip(range(1, niter + 1), batches)
 
+    # Save temporal version
+    D_temporal = np.zeros(D.shape + (niter,))
+
     for t, batch in tqdm(iterator, total=niter):
 
         cutter = X[batch].shape[0]
@@ -182,6 +185,7 @@ def online_DL(X, D=None, n_atoms=None, niter=250, batchsize=128, rho=1., t0=1e-3
         B_prime += x_alpha_T
 
         update_D(D, A, B, X, positivity=False)
+        D_temporal[..., t] = D
 
         # reset past information every two full epochs
         if seen_patches > 2 * X.shape[0]:
@@ -196,4 +200,4 @@ def online_DL(X, D=None, n_atoms=None, niter=250, batchsize=128, rho=1., t0=1e-3
             seen_patches += batchsize
 
     print('total {}'.format(time() - tt))
-    return D
+    return D_temporal

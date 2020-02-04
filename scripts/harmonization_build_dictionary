@@ -42,6 +42,7 @@ def main():
     datasets = get_filenames(path, use_glob, kwargs)
 
     D = get_global_D(datasets, outfilename, **kwargs)
+    outfilename = outfilename.replace('.npy', '_temporal.npy')
     np.save(outfilename, D)
 
 
